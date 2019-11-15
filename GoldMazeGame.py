@@ -1,7 +1,7 @@
 
-import turtle
 import math
 import random
+import turtle
 
 Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Bck1_2.gif"
 Player_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/left.gif"
@@ -83,16 +83,32 @@ class Enemy(turtle.Turtle):
         self.direction = random.choice(("L", "R", "U", "D"))
 
     def move_enemy(self):
-        next_x = self.xcor() + 24*(self.direction == "L")\
-                 - 24*(self.direction == "R")
-        next_y = self.ycor() + 24*(self.direction == "U")\
-            - 24*(self.direction == "D")
+        if self.detect_other(player):
+            if player.xcor() < self.xcor():
+                self.direction == "L"
+            elif player.xcor() > self.xcor():
+                self.direction == 'R'
+            elif player.ycor() < self.xcor():
+                self.direction == 'D'
+            elif player.ycor() > self.ycor():
+                self.direction == 'U'
+
+        next_x = self.xcor() + 24*(self.direction == "L") - 24*(self.direction == "R")
+        next_y = self.ycor() + 24*(self.direction == "U") - 24*(self.direction == "D")
 
         if (next_x, next_y) not in walls:
             self.goto(next_x, next_y)
         else:
             self.direction = random.choice(("L", "R", "U", "D"))
+
         turtle.ontimer(self.move_enemy, t=random.randint(100, 300))
+
+    def detect_other(self, other):
+        x_distance = self.xcor() - other.xcor()
+        y_distance = self.ycor() - other.ycor()
+        distance = math.sqrt(x_distance**2 + y_distance**2)
+
+        return True if distance < 75 else False
 
     def destroy(self):
         self.goto(2000, 2000)
