@@ -3,15 +3,24 @@ import turtle
 import math
 import random
 
+Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Bck1_2.gif"
+Player_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/left.gif"
+Player_Right =
+Enemy_Left =
+Enemy_Right =
+Brick_Pic =
+OpenTreasure_Pic =
+ClosedTreasure_Pic =
+
 wn = turtle.Screen()
 wn.bgcolor('white')
-wn.bgpic("Bck1_2.gif")
+wn.bgpic()
 wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in ["/Sprites/left.gif", "/Sprites/right.gif", '/Sprites/idle.gif', '/Sprites/closedTreasure.gif',
-              "/Sprites/openTreasure.gif", "/Sprites/BrickImage.gif", "/Sprites/up.gif", "/Sprites/down.gif"]:
+for image in [Background_Pic, Player_Left, Player_Right, Enemy_Left, Enemy_Right, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
+
     turtle.register_shape(image)
 
 
@@ -19,7 +28,7 @@ class Wall(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("BrickImage.gif")
+        self.shape("/Sprites/BrickImage.gif")
         self.color('white')
         self.penup()
         self.speed(0)
@@ -29,7 +38,7 @@ class Player(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("idle.gif")
+        self.shape("Sprites/idle.gif")
         self.color('blue')
         self.penup()
         self.speed(0)
@@ -42,19 +51,19 @@ class Player(turtle.Turtle):
 
     def move_up(self):
         self.take_next_step(self.xcor(), self.ycor() + 24)
-        self.shape("up.gif")
+        self.shape("Sprites/up.gif")
 
     def move_down(self):
         self.take_next_step(self.xcor(), self.ycor() - 24)
-        self.shape("down.gif")
+        self.shape("Sprites/down.gif")
 
     def move_right(self):
         self.take_next_step(self.xcor() + 24, self.ycor())
-        self.shape("right.gif")
+        self.shape("Sprites/right.gif")
 
     def move_left(self):
         self.take_next_step(self.xcor() - 24, self.ycor())
-        self.shape("left.gif")
+        self.shape("Sprites/left.gif")
 
     def is_collision(self, other):
         a = self.xcor() - other.xcor()
@@ -96,7 +105,7 @@ class Treasure(turtle.Turtle):
 
     def __init__(self, x, y):
         turtle.Turtle.__init__(self)
-        self.shape("closedTreasure.gif")
+        self.shape("Sprites/closedTreasure.gif")
         self.color('gold')
         self.penup()
         self.speed(0)
@@ -117,7 +126,7 @@ def setup_maze(level):
 
             if character == 'X':
                 block.goto(x_coordinate, y_coordinate)
-                block.shape("BrickImage.gif")
+                block.shape("Sprites/BrickImage.gif")
                 block.stamp()
                 walls.append((x_coordinate, y_coordinate))
 
@@ -216,7 +225,7 @@ for enemy in enemies:
 while True:
     for reward in treasure:
         if player.is_collision(reward):
-            reward.shape("openTreasure.gif")
+            reward.shape("Sprites/openTreasure.gif")
             player.points += reward.points
             print("Player Points: {}".format(player.points))
             # reward.destroy()
