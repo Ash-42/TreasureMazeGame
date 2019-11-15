@@ -20,7 +20,7 @@ wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [Background_Pic, Player_Left, Player_Right, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
+for image in [Background_Pic, Player_Left, Player_Right, Player_Up, Player_Down, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
     turtle.register_shape(image)
 
 
