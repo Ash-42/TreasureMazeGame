@@ -10,7 +10,7 @@ Player_Up = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/up.gif"
 Player_Down = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/down.gif"
 # Enemy_Left =
 # Enemy_Right =
-Brick_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Block.gif"
+Brick_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Brick.gif"
 OpenTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/OpenTreasure.gif"
 ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.gif"
 
@@ -20,7 +20,7 @@ wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [Background_Pic, Player_Left, Player_Right, Enemy_Left, Enemy_Right, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
+for image in [Background_Pic, Player_Left, Player_Right, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
     turtle.register_shape(image)
 
 
