@@ -15,13 +15,10 @@ OpenTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/OpenTreasure.gif"
 ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.gif"
 
 wn = turtle.Screen()
-# wn.reset()
-# wn.setworldcoordinates(-388, -412, 412, 388)
 wn.bgpic(Background_Pic)
 wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
-# wn.screensize()
 
 for image in [Background_Pic, Player_Left, Player_Right, Player_Up, Player_Down, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
     turtle.register_shape(image)
@@ -115,6 +112,19 @@ class Treasure(turtle.Turtle):
         self.goto(2000, 2000)
         self.destroy
 
+class Exit(turtle.Turtle):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.color("black")
+        self.penup()
+        self.speed(0)
+
+    def playerExit(self):
+        if treasure == []:
+            wn.clearscreen()
+            setup_maze(level_2)
+
 
 class Lives(turtle.Turtle):
 
@@ -178,11 +188,14 @@ def setup_maze(level):
             if character == 'E':
                 enemies.append(Enemy(x_coordinate, y_coordinate))
 
+            if character == 'I':
+                exit.goto(x_coordinate, y_coordinate)
 
 block = Wall()
 player = Player()
 livesBox = Lives()
 pointsBox = Points()
+exit = Exit()
 treasure = []
 enemies = []
 walls = []
@@ -211,12 +224,12 @@ level_1 = [
     "X  X  XXXXXXXXXXXXX  X  X",
     "X     X     X        X  X",
     "X  XXXX  X  X  XXXXXXX  X",
-    "X     E  X     X        X",
+    "X     E  X     X        I",
     "XXXXXXXXXXXXXXXXXXXXXXXXX"
 ]
 level_2 = [
     "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XT         EX           X",
+    "IT         EX           X",
     "X  XXXXXXX  XXXXXXXXXX  X",
     "X       EX     X     X  X",
     "X  XXXX  XXXX  X  X  X  X",
@@ -256,6 +269,9 @@ for enemy in enemies:
     turtle.ontimer(enemy.move_enemy, t=120)
 
 while True:
+
+    if player.is_collision(exit):
+        exit.playerExit(player.xcor(), player.ycor())
 
     for reward in treasure:
 
