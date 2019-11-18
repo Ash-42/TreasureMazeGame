@@ -131,9 +131,24 @@ class Lives(turtle.Turtle):
         self.write(self.lifecount, False, align='left', font=('Times New Roman', 14, 'bold'))
 
 
+class Points(turtle.Turtle):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.color("black")
+        self.penup()
+        self.speed(0)
+        self.setposition(-300, 320)
+        self.hideturtle()
+
+    def showPoints(self):
+        self.write('Points: {}'.format(player.points), False, align='left', font=('Times New Roman', 14, 'bold'))
+
+
 def setup_maze(level):
 
     livesBox.showLives()
+    pointsBox.showPoints()
 
     for y in range(len(level)):
         for x in range(len(level[y])):
@@ -167,6 +182,7 @@ def setup_maze(level):
 block = Wall()
 player = Player()
 livesBox = Lives()
+pointsBox = Points()
 treasure = []
 enemies = []
 walls = []
@@ -242,21 +258,23 @@ for enemy in enemies:
 while True:
 
     for reward in treasure:
+
         if player.is_collision(reward):
             reward.shape(OpenTreasure_Pic)
             player.points += reward.points
+            livesBox.showLives()
             print("Player Points: {}".format(player.points))
             treasure.remove(reward)
 
     for enemy in enemies:
+
         if player.is_collision(enemy):
-            # x_pos, y_pos = player.xcor(), player.ycor()
             player.lives -= 1
             livesBox.lifecount = 'Lives Remaining: {}'.format(player.lives)
             livesBox.clear()
             livesBox.showLives()
             enemy.destroy()
-            # enemy.setposition(x_pos, y_pos)
+
             if player.lives == 0:
                 print("Player Dead")
                 wn.clearscreen()
