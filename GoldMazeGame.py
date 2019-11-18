@@ -124,6 +124,8 @@ class Exit(turtle.Turtle):
         if treasure == []:
             wn.clearscreen()
             setup_maze(level_2)
+        else:
+            walls.append((self.xcor(), self.ycor()))
 
 
 class Lives(turtle.Turtle):
@@ -271,7 +273,7 @@ for enemy in enemies:
 while True:
 
     if player.is_collision(exit):
-        exit.playerExit(player.xcor(), player.ycor())
+        exit.playerExit()
 
     for reward in treasure:
 
