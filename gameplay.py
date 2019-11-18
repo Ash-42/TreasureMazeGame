@@ -2,6 +2,6 @@ import turtle
 
 wn = turtle.Screen()
 wn.setup(700, 700)
-# wn.numinput("Poker", "Your stakes:", 1000, minval=10, maxval=10000)
-wn.window_width()
-wn.window_height()
+turtle.hideturtle()
+turtle.write('Game Over', False, align='center', font=('Times New Roman', 50, 'bold'))
+wn.mainloop()

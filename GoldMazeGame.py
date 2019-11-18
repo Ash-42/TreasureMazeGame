@@ -14,13 +14,13 @@ Brick_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Brick.gif"
 OpenTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/OpenTreasure.gif"
 ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.gif"
 
-game_window = turtle.Screen()
+wn = turtle.Screen()
 # wn.reset()
 # wn.setworldcoordinates(-388, -412, 412, 388)
-game_windown.bgpic(Background_Pic)
-game_windown.title('Get That Gold')
-game_windown.setup(700, 700)
-game_windown.tracer(0)
+wn.bgpic(Background_Pic)
+wn.title('Get That Gold')
+wn.setup(700, 700)
+wn.tracer(0)
 # wn.screensize()
 
 for image in [Background_Pic, Player_Left, Player_Right, Player_Up, Player_Down, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
@@ -123,13 +123,17 @@ class Lives(turtle.Turtle):
         self.color("black")
         self.penup()
         self.speed(0)
-        self.setposition(300, 320)
-        self.lifecount = 'Lives Remaining: %s'
-        self.write(lifecount, False, align='left', font=('Arial', 14, 'normal'))
+        self.setposition(100, 320)
         self.hideturtle()
+        self.lifecount = 'Lives Remaining: {}'.format(player.lives)
+
+    def showLives(self):
+        self.write(self.lifecount, False, align='left', font=('Times New Roman', 14, 'bold'))
 
 
 def setup_maze(level):
+
+    livesBox.showLives()
 
     for y in range(len(level)):
         for x in range(len(level[y])):
@@ -162,7 +166,7 @@ def setup_maze(level):
 
 block = Wall()
 player = Player()
-# reward = Reward()
+livesBox = Lives()
 treasure = []
 enemies = []
 walls = []
@@ -248,11 +252,17 @@ while True:
         if player.is_collision(enemy):
             # x_pos, y_pos = player.xcor(), player.ycor()
             player.lives -= 1
+            livesBox.lifecount = 'Lives Remaining: {}'.format(player.lives)
+            livesBox.clear()
+            livesBox.showLives()
             enemy.destroy()
             # enemy.setposition(x_pos, y_pos)
             if player.lives == 0:
                 print("Player Dead")
-                game_window.clearscreen()
+                wn.clearscreen()
+                # wn.bgpic(GameOver)
+                turtle.hideturtle()
+                turtle.write('Game Over', False, align='center', font=('Times New Roman', 50, 'bold'))
 
     wn.update()
 
