@@ -14,13 +14,13 @@ Brick_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Brick.gif"
 OpenTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/OpenTreasure.gif"
 ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.gif"
 
-wn = turtle.Screen()
+game_window = turtle.Screen()
 # wn.reset()
-# wn.setworldcoordinates(-288, -312, 312, 288)
-wn.bgpic(Background_Pic)
-wn.title('Get That Gold')
-wn.setup(700, 700)
-wn.tracer(0)
+# wn.setworldcoordinates(-388, -412, 412, 388)
+game_windown.bgpic(Background_Pic)
+game_windown.title('Get That Gold')
+game_windown.setup(700, 700)
+game_windown.tracer(0)
 # wn.screensize()
 
 for image in [Background_Pic, Player_Left, Player_Right, Player_Up, Player_Down, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
@@ -51,26 +51,26 @@ class Player(turtle.Turtle):
             self.goto(next_x, next_y)
 
     def move_up(self):
-        self.take_next_step(self.xcor(), self.ycor() + 12)
+        self.take_next_step(self.xcor(), self.ycor() + 24)
         self.shape(Player_Up)
 
     def move_down(self):
-        self.take_next_step(self.xcor(), self.ycor() - 12)
+        self.take_next_step(self.xcor(), self.ycor() - 24)
         self.shape(Player_Down)
 
     def move_right(self):
-        self.take_next_step(self.xcor() + 12, self.ycor())
+        self.take_next_step(self.xcor() + 24, self.ycor())
         self.shape(Player_Right)
 
     def move_left(self):
-        self.take_next_step(self.xcor() - 12, self.ycor())
+        self.take_next_step(self.xcor() - 24, self.ycor())
         self.shape(Player_Left)
 
     def is_collision(self, other):
         a = self.xcor() - other.xcor()
         b = self.ycor() - other.ycor()
         distance = math.sqrt(a**2 + b**2)
-        return True if distance < 5 else False
+        return True if distance == 0 else False
 
 
 class Enemy(turtle.Turtle):
@@ -122,7 +122,11 @@ class Score(turtle.Turtle):
         turtle.Turtle.__init__(self)
         self.color("black")
         self.penup()
-        self.speed()
+        self.speed(0)
+        # self.setposition()
+        self.lifecount = 'Lives: %s'
+        self.write(lifecount, False, align='left', font=('Arial', 14, 'normal'))
+        self.hideturtle()
 
 
 def setup_maze(level):
@@ -140,6 +144,7 @@ def setup_maze(level):
 
             if character == 'P':
                 player.goto(x_coordinate, y_coordinate)
+                player.lives = 3
 
             if character == 'T':
                 reward = random.choice(('Gold', 'Silver', 'Bronze'))
@@ -231,6 +236,7 @@ for enemy in enemies:
     turtle.ontimer(enemy.move_enemy, t=120)
 
 while True:
+
     for reward in treasure:
         if player.is_collision(reward):
             reward.shape(OpenTreasure_Pic)
@@ -240,12 +246,15 @@ while True:
 
     for enemy in enemies:
         if player.is_collision(enemy):
+            # x_pos, y_pos = player.xcor(), player.ycor()
             player.lives -= 1
+            enemy.destroy()
+            # enemy.setposition(x_pos, y_pos)
             if player.lives == 0:
                 print("Player Dead")
-                # turtle.clearscreen()
-
+                game_window.clearscreen()
 
     wn.update()
 
 wn.mainloop()
+wn.done()
