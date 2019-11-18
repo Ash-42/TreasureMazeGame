@@ -116,15 +116,15 @@ class Treasure(turtle.Turtle):
         self.destroy
 
 
-class Score(turtle.Turtle):
+class Lives(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
         self.color("black")
         self.penup()
         self.speed(0)
-        # self.setposition()
-        self.lifecount = 'Lives: %s'
+        self.setposition(300, 320)
+        self.lifecount = 'Lives Remaining: %s'
         self.write(lifecount, False, align='left', font=('Arial', 14, 'normal'))
         self.hideturtle()
 
