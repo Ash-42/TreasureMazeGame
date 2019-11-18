@@ -15,10 +15,13 @@ OpenTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/OpenTreasure.gif"
 ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.gif"
 
 wn = turtle.Screen()
+# wn.reset()
+# wn.setworldcoordinates(-288, -312, 312, 288)
 wn.bgpic(Background_Pic)
 wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
+# wn.screensize()
 
 for image in [Background_Pic, Player_Left, Player_Right, Player_Up, Player_Down, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
     turtle.register_shape(image)
@@ -48,19 +51,19 @@ class Player(turtle.Turtle):
             self.goto(next_x, next_y)
 
     def move_up(self):
-        self.take_next_step(self.xcor(), self.ycor() + 24)
+        self.take_next_step(self.xcor(), self.ycor() + 12)
         self.shape(Player_Up)
 
     def move_down(self):
-        self.take_next_step(self.xcor(), self.ycor() - 24)
+        self.take_next_step(self.xcor(), self.ycor() - 12)
         self.shape(Player_Down)
 
     def move_right(self):
-        self.take_next_step(self.xcor() + 24, self.ycor())
+        self.take_next_step(self.xcor() + 12, self.ycor())
         self.shape(Player_Right)
 
     def move_left(self):
-        self.take_next_step(self.xcor() - 24, self.ycor())
+        self.take_next_step(self.xcor() - 12, self.ycor())
         self.shape(Player_Left)
 
     def is_collision(self, other):
@@ -111,6 +114,15 @@ class Treasure(turtle.Turtle):
     def destroy(self):
         self.goto(2000, 2000)
         self.destroy
+
+
+class Score(turtle.Turtle):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.color("black")
+        self.penup()
+        self.speed()
 
 
 def setup_maze(level):
@@ -207,7 +219,7 @@ level_2 = [
 levels.append(level_1)
 levels.append(level_2)
 
-setup_maze(levels[2])
+setup_maze(levels[1])
 
 wn.onkey(player.move_down, "Down")
 wn.onkey(player.move_up, "Up")
@@ -231,6 +243,8 @@ while True:
             player.lives -= 1
             if player.lives == 0:
                 print("Player Dead")
+                # turtle.clearscreen()
+
 
     wn.update()
 
