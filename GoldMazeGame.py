@@ -3,7 +3,7 @@ import turtle
 import math
 import random
 
-Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/batsBackground.gif.gif"
+Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/B.gif"
 GameOver = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/GameOverBackground.gif"
 # Player_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/left.gif"
 # Player_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/right.gif"
@@ -18,11 +18,12 @@ ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.
 
 wn = turtle.Screen()
 wn.bgpic(Background_Pic)
+wn.bgcolor('black')
 wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [Background_Pic, Player_Skeleton, GameOver,
+for image in [Player_Skeleton, GameOver, Background_Pic,
             # Player_Left, Player_Right, Player_Up, Player_Down,
             Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic, Enemy_Left, Enemy_Right]:
     turtle.register_shape(image)
@@ -32,7 +33,9 @@ class Wall(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape(Brick_Pic)
+        # self.shape(Brick_Pic)
+        self.shape('square')
+        self.color('grey')
         self.penup()
         self.speed(0)
 
@@ -139,7 +142,7 @@ class Lives(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.color("black")
+        self.color("white")
         self.penup()
         self.speed(0)
         self.setposition(100, 320)
@@ -154,7 +157,7 @@ class Points(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.color("black")
+        self.color("white")
         self.penup()
         self.speed(0)
         self.setposition(-300, 320)
@@ -182,7 +185,6 @@ def setup_maze(level):
                 walls.append((x_coordinate, y_coordinate))
             if character == 'P':
                 player.goto(x_coordinate, y_coordinate)
-                player.lives = 3
 
             if character == 'T':
                 reward = random.choice(('Gold', 'Silver', 'Bronze'))
@@ -265,7 +267,7 @@ level_2 = [
     "XXXX  XXXXXXXXXX  X  XXXX",
     "X     X        X  X  X  X",
     "X  X  X     X TX  X  X  X",
-    "XE X  XXXX  XXXX  X X  X",
+    "XE X  XXXX  XXXX  X X   X",
     "X  X     E  X     X     X",
     "X  X  XXXXXXX  XXXXXXX  X",
     "X  X     XT         EX  X",
