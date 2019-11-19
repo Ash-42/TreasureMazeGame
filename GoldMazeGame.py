@@ -126,7 +126,7 @@ class Exit(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.color("black")
+        self.color("white")
         self.penup()
         self.speed(0)
 
@@ -134,8 +134,7 @@ class Exit(turtle.Turtle):
         wn.clearscreen()
         wn.bgpic(Background_Pic)
         wn.tracer(0)
-        setup_maze(levels[2])
-
+        wn.resetscreen()
 
 
 class Lives(turtle.Turtle):
@@ -181,8 +180,8 @@ def setup_maze(level):
             if character == 'X':
                 block.goto(x_coordinate, y_coordinate)
                 block.stamp()
-
                 walls.append((x_coordinate, y_coordinate))
+
             if character == 'P':
                 player.goto(x_coordinate, y_coordinate)
 
@@ -228,7 +227,7 @@ walls = []
 levels = [""]
 level_1 = [
     "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XP       X     X    E   X",
+    "X        X     X    E   X",
     "XXXXXXX  X  X  X  XXXX  X",
     "X        X EX  X  X  X  X",
     "X  X  XXXXXXX  X  X  X  X",
@@ -236,28 +235,28 @@ level_1 = [
     "X  XXXX  X  X  X  XXXXXXX",
     "X  X     X     X        X",
     "X  X  XXXXXXXXXXXXXXXX  X",
-    "X     XT             E  X",
+    "X     X             E  X",
     "X  XXXX  X  XXXXXXXXXX  X",
     "X  X  X  X  X     X     X",
     "X  X  X  X  XXXX  X  XXXX",
-    "X  XE    X     XT       X",
+    "X  XE    X     X        X",
     "X  XXXX  XXXX  XXXXXXX  X",
     "X     X     X        X  X",
     "XXXX  XXXXXXX  XXXX  XXXX",
     "X  X E      X  XE X     X",
     "X  XXXXXXX  X  X  XXXX  X",
-    "X  XT       X     X     X",
+    "X  X        X     X     X",
     "X  X  XXXXXXXXXXXXX  X  X",
     "X     X     X        X  X",
     "X  XXXX  X  X  XXXXXXX  X",
-    "X     E  X     X        I",
+    "X     E  X     X   P  TTI",
     "XXXXXXXXXXXXXXXXXXXXXXXXX"
 ]
 level_2 = [
     "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    "IT         EX           X",
+    "I          EX           X",
     "X  XXXXXXX  XXXXXXXXXX  X",
-    "X       EX     X     X  X",
+    "X   P   EX     X     X  X",
     "X  XXXX  XXXX  X  X  X  X",
     "X  X  XE X  X     X    TX",
     "X  X  X  X  XXXX  XXXXXXX",
@@ -266,17 +265,17 @@ level_2 = [
     "X  X     XE       X     X",
     "XXXX  XXXXXXXXXX  X  XXXX",
     "X     X        X  X  X  X",
-    "X  X  X     X TX  X  X  X",
+    "X  X  X       TX  X  X  X",
     "XE X  XXXX  XXXX  X X   X",
-    "X  X     E  X     X     X",
+    "X  X        X     X     X",
     "X  X  XXXXXXX  XXXXXXX  X",
     "X  X     XT         EX  X",
     "X  XXXX  XXXXXXXXXXXXX  X",
-    "X       E             X X",
-    "XXXXXXX  X  XXXXXXX  X  X",
-    "X        X     X  XE   TX",
+    "X       E            X  X",
+    "XXXXXXX  X  XXXXXXX     X",
+    "X        X     X  X    TX",
     "X  XXXXXXXXXX  X  XXXXXXX",
-    "XE                     PX",
+    "XE                      X",
     "XXXXXXXXXXXXXXXXXXXXXXXXX"
 ]
 
@@ -285,9 +284,6 @@ levels.append(level_2)
 
 setup_level(1)
 
-print(walls)
-print((exit.xcor(), exit.ycor()))
-print((exit.xcor(), exit.ycor()) in walls)
 while True:
 
     if len(treasure) == 0:
