@@ -23,7 +23,7 @@ wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [GameOver, Background_Pic, Player_Image, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic,     Enemy_Left, Enemy_Right]:
+for image in [GameOver, Background_Pic, Player_Image, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic, Enemy_Left, Enemy_Right]:
     turtle.register_shape(image)
 
 
