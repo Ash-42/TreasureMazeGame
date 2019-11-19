@@ -4,7 +4,7 @@ import math
 import random
 
 Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/batsBackground.gif.gif"
-# GameOver = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Bck2.gif"
+GameOver = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/GameOverBackground.gif"
 # Player_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/left.gif"
 # Player_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/right.gif"
 # Player_Up = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/up.gif"
@@ -22,7 +22,7 @@ wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [Background_Pic, Player_Skeleton,
+for image in [Background_Pic, Player_Skeleton, GameOver,
             # Player_Left, Player_Right, Player_Up, Player_Down,
             Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic, Enemy_Left, Enemy_Right]:
     turtle.register_shape(image)
@@ -128,13 +128,11 @@ class Exit(turtle.Turtle):
         self.speed(0)
 
     def isLevelDone(self):
-        if len(treasure) == 0:
-            wn.clearscreen()
-            wn.bgpic(Background_Pic)
-            wn.tracer(0)
-            setup_maze(levels[2])
-        else:
-            walls.append((self.xcor(), self.ycor()))
+        wn.clearscreen()
+        wn.bgpic(Background_Pic)
+        wn.tracer(0)
+        setup_maze(levels[2])
+
 
 
 class Lives(turtle.Turtle):
@@ -180,8 +178,8 @@ def setup_maze(level):
             if character == 'X':
                 block.goto(x_coordinate, y_coordinate)
                 block.stamp()
-                walls.append((x_coordinate, y_coordinate))
 
+                walls.append((x_coordinate, y_coordinate))
             if character == 'P':
                 player.goto(x_coordinate, y_coordinate)
                 player.lives = 3
@@ -201,6 +199,8 @@ def setup_maze(level):
 
             if character == 'I':
                 exit.goto(x_coordinate, y_coordinate)
+                exit.x_cor, exit.y_cor = x_coordinate, y_coordinate
+                walls.append((exit.x_cor, exit.y_cor))
 
 def setup_level(level):
 
@@ -232,19 +232,19 @@ level_1 = [
     "X  X  XXXXXXX  X  X  X  X",
     "X  X  X     X  X  X     X",
     "X  XXXX  X  X  X  XXXXXXX",
-    "X  X     X     XT       X",
+    "X  X     X     X        X",
     "X  X  XXXXXXXXXXXXXXXX  X",
-    "X     X              E  X",
+    "X     XT             E  X",
     "X  XXXX  X  XXXXXXXXXX  X",
-    "X  X  X  X  XT    X     X",
+    "X  X  X  X  X     X     X",
     "X  X  X  X  XXXX  X  XXXX",
-    "X  XE    X     X        X",
+    "X  XE    X     XT       X",
     "X  XXXX  XXXX  XXXXXXX  X",
     "X     X     X        X  X",
     "XXXX  XXXXXXX  XXXX  XXXX",
-    "X  X E      X  X TX     X",
+    "X  X E      X  XE X     X",
     "X  XXXXXXX  X  X  XXXX  X",
-    "X  X        X     X     X",
+    "X  XT       X     X     X",
     "X  X  XXXXXXXXXXXXX  X  X",
     "X     X     X        X  X",
     "X  XXXX  X  X  XXXXXXX  X",
@@ -283,11 +283,17 @@ levels.append(level_2)
 
 setup_level(1)
 
+print(walls)
+print((exit.xcor(), exit.ycor()))
+print((exit.xcor(), exit.ycor()) in walls)
 while True:
 
-    if player.is_collision(exit):
-        exit.isLevelDone()
-        setup_level(2)
+    if len(treasure) == 0:
+        if (exit.xcor(), exit.ycor()) in walls:
+            walls.remove((exit.xcor(), exit.ycor()))
+        if player.is_collision(exit):
+            exit.isLevelDone()
+            setup_level(2)
 
     for reward in treasure:
 
@@ -315,6 +321,7 @@ while True:
                 wn.clearscreen()
                 wn.bgpic(GameOver)
                 turtle.hideturtle()
+                turtle.color('white')
                 turtle.write('Game Over', False, align='center', font=('Times New Roman', 50, 'bold'))
 
     wn.update()
