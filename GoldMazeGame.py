@@ -9,7 +9,7 @@ GameOver = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/GameOverBackground.gif"
 # Player_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/right.gif"
 # Player_Up = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/up.gif"
 # Player_Down = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/down.gif"
-Player_Skeleton = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/player.gif"
+Player_Image = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/squareplayer.gif"
 Enemy_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/enemyGhostLeft.gif"
 Enemy_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/enemyGhostRight.gif"
 Brick_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Brick.gif"
@@ -23,9 +23,7 @@ wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [Player_Skeleton, GameOver, Background_Pic,
-            # Player_Left, Player_Right, Player_Up, Player_Down,
-            Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic, Enemy_Left, Enemy_Right]:
+for image in [GameOver, Background_Pic, Player_Image, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic,     Enemy_Left, Enemy_Right]:
     turtle.register_shape(image)
 
 
@@ -44,7 +42,9 @@ class Player(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape(Player_Skeleton)
+        # self.shape(Player_Skeleton)
+        self.shape(Player_Image)
+        # self.color('red')
         self.penup()
         self.speed(0)
         self.points = 0
@@ -132,9 +132,9 @@ class Exit(turtle.Turtle):
 
     def isLevelDone(self):
         wn.clearscreen()
+        wn.resetscreen()
         wn.bgpic(Background_Pic)
         wn.tracer(0)
-        wn.resetscreen()
 
 
 class Lives(turtle.Turtle):
@@ -165,6 +165,9 @@ class Points(turtle.Turtle):
     def showPoints(self):
         self.write('Points: {}'.format(player.points), False, align='left', font=('Times New Roman', 14, 'bold'))
 
+    def showLevel(self):
+        self.setposition(-80, 320)
+        self.write('Level 1', False, align='left', font=('Times New Roman', 14, 'bold'))
 
 def setup_maze(level):
 
@@ -220,6 +223,7 @@ block = Wall()
 player = Player()
 livesBox = Lives()
 pointsBox = Points()
+textbox = Points()
 exit = Exit()
 treasure = []
 enemies = []
@@ -227,7 +231,7 @@ walls = []
 levels = [""]
 level_1 = [
     "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    "X        X     X    E   X",
+    "XP       X     X    E   X",
     "XXXXXXX  X  X  X  XXXX  X",
     "X        X EX  X  X  X  X",
     "X  X  XXXXXXX  X  X  X  X",
@@ -235,28 +239,28 @@ level_1 = [
     "X  XXXX  X  X  X  XXXXXXX",
     "X  X     X     X        X",
     "X  X  XXXXXXXXXXXXXXXX  X",
-    "X     X             E  X",
+    "X     X             E   X",
     "X  XXXX  X  XXXXXXXXXX  X",
     "X  X  X  X  X     X     X",
     "X  X  X  X  XXXX  X  XXXX",
     "X  XE    X     X        X",
     "X  XXXX  XXXX  XXXXXXX  X",
-    "X     X     X        X  X",
+    "X     X     X       EX  X",
     "XXXX  XXXXXXX  XXXX  XXXX",
-    "X  X E      X  XE X     X",
+    "X TX E      X  XE X     X",
     "X  XXXXXXX  X  X  XXXX  X",
-    "X  X        X     X     X",
+    "X  X       TX     X     X",
     "X  X  XXXXXXXXXXXXX  X  X",
-    "X     X     X        X  X",
+    "X     X     X       TX  X",
     "X  XXXX  X  X  XXXXXXX  X",
-    "X     E  X     X   P  TTI",
+    "X     E  X     X        I",
     "XXXXXXXXXXXXXXXXXXXXXXXXX"
 ]
 level_2 = [
     "XXXXXXXXXXXXXXXXXXXXXXXXX",
     "I          EX           X",
     "X  XXXXXXX  XXXXXXXXXX  X",
-    "X   P   EX     X     X  X",
+    "X       EX     X     X  X",
     "X  XXXX  XXXX  X  X  X  X",
     "X  X  XE X  X     X    TX",
     "X  X  X  X  XXXX  XXXXXXX",
@@ -266,7 +270,7 @@ level_2 = [
     "XXXX  XXXXXXXXXX  X  XXXX",
     "X     X        X  X  X  X",
     "X  X  X       TX  X  X  X",
-    "XE X  XXXX  XXXX  X X   X",
+    "XE X  XXXX  XXXX  X  X  X",
     "X  X        X     X     X",
     "X  X  XXXXXXX  XXXXXXX  X",
     "X  X     XT         EX  X",
@@ -275,7 +279,7 @@ level_2 = [
     "XXXXXXX  X  XXXXXXX     X",
     "X        X     X  X    TX",
     "X  XXXXXXXXXX  X  XXXXXXX",
-    "XE                      X",
+    "XP                    E X",
     "XXXXXXXXXXXXXXXXXXXXXXXXX"
 ]
 
@@ -283,6 +287,7 @@ levels.append(level_1)
 levels.append(level_2)
 
 setup_level(1)
+textbox.showLevel()
 
 while True:
 
@@ -290,7 +295,19 @@ while True:
         if (exit.xcor(), exit.ycor()) in walls:
             walls.remove((exit.xcor(), exit.ycor()))
         if player.is_collision(exit):
-            exit.isLevelDone()
+            wn.clearscreen()
+            wn.resetscreen()
+            wn.tracer(0)
+            wn.bgpic(Background_Pic)
+            player = Player()
+            block = Wall()
+            livesBox = Lives()
+            pointsBox = Points()
+            exit = Exit()
+            textbox = Points()
+            treasure = []
+            enemies = []
+            walls = []
             setup_level(2)
 
     for reward in treasure:
