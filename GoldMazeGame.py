@@ -3,13 +3,15 @@ import turtle
 import math
 import random
 
-Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Bck1_2.gif"
-Player_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/left.gif"
-Player_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/right.gif"
-Player_Up = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/up.gif"
-Player_Down = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/down.gif"
-# Enemy_Left =
-# Enemy_Right =
+Background_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/batsBackground.gif.gif"
+# GameOver = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Bck2.gif"
+# Player_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/left.gif"
+# Player_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/right.gif"
+# Player_Up = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/up.gif"
+# Player_Down = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/down.gif"
+Player_Skeleton = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/player.gif"
+Enemy_Left = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/enemyGhostLeft.gif"
+Enemy_Right = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/enemyGhostRight.gif"
 Brick_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/Brick.gif"
 OpenTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/OpenTreasure.gif"
 ClosedTreasure_Pic = "/home/lenovo/PESU Sem - 1/MazeGame/Sprites/ClosedTreasure.gif"
@@ -20,7 +22,9 @@ wn.title('Get That Gold')
 wn.setup(700, 700)
 wn.tracer(0)
 
-for image in [Background_Pic, Player_Left, Player_Right, Player_Up, Player_Down, Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic]:
+for image in [Background_Pic, Player_Skeleton,
+            # Player_Left, Player_Right, Player_Up, Player_Down,
+            Brick_Pic, OpenTreasure_Pic,  ClosedTreasure_Pic, Enemy_Left, Enemy_Right]:
     turtle.register_shape(image)
 
 
@@ -37,7 +41,7 @@ class Player(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape(Player_Right)
+        self.shape(Player_Skeleton)
         self.penup()
         self.speed(0)
         self.points = 0
@@ -49,19 +53,19 @@ class Player(turtle.Turtle):
 
     def move_up(self):
         self.take_next_step(self.xcor(), self.ycor() + 24)
-        self.shape(Player_Up)
+        # self.shape(Player_Up)
 
     def move_down(self):
         self.take_next_step(self.xcor(), self.ycor() - 24)
-        self.shape(Player_Down)
+        # self.shape(Player_Down)
 
     def move_right(self):
         self.take_next_step(self.xcor() + 24, self.ycor())
-        self.shape(Player_Right)
+        # self.shape(Player_Right)
 
     def move_left(self):
         self.take_next_step(self.xcor() - 24, self.ycor())
-        self.shape(Player_Left)
+        # self.shape(Player_Left)
 
     def is_collision(self, other):
         a = self.xcor() - other.xcor()
@@ -74,13 +78,16 @@ class Enemy(turtle.Turtle):
 
     def __init__(self, x, y):
         turtle.Turtle.__init__(self)
-        self.shape('circle')
-        self.color('red')
+        self.shape(Enemy_Left)
         self.penup()
         self.speed(0)
         self.points = 20
         self.goto(x, y)
         self.direction = random.choice(("L", "R", "U", "D"))
+        if self.direction == "L":
+            self.shape(Enemy_Left)
+        elif self.direction == "R":
+            self.shape(Enemy_Right)
 
     def move_enemy(self):
         next_x = self.xcor() + 24*(self.direction == "L")\
@@ -120,10 +127,12 @@ class Exit(turtle.Turtle):
         self.penup()
         self.speed(0)
 
-    def playerExit(self):
-        if treasure == []:
+    def isLevelDone(self):
+        if len(treasure) == 0:
             wn.clearscreen()
-            setup_maze(level_2)
+            wn.bgpic(Background_Pic)
+            wn.tracer(0)
+            setup_maze(levels[2])
         else:
             walls.append((self.xcor(), self.ycor()))
 
@@ -193,6 +202,19 @@ def setup_maze(level):
             if character == 'I':
                 exit.goto(x_coordinate, y_coordinate)
 
+def setup_level(level):
+
+    setup_maze(levels[level])
+
+    wn.onkey(player.move_down, "Down")
+    wn.onkey(player.move_up, "Up")
+    wn.onkey(player.move_left, "Left")
+    wn.onkey(player.move_right, "Right")
+    wn.listen()
+
+    for enemy in enemies:
+        turtle.ontimer(enemy.move_enemy, t=120)
+
 block = Wall()
 player = Player()
 livesBox = Lives()
@@ -242,13 +264,13 @@ level_2 = [
     "X  X     XE       X     X",
     "XXXX  XXXXXXXXXX  X  XXXX",
     "X     X        X  X  X  X",
-    "X  XXXX  X  X TX  X  X  X",
-    "XE XXXXXXX  XXXX  X X  X",
+    "X  X  X     X TX  X  X  X",
+    "XE X  XXXX  XXXX  X X  X",
     "X  X     E  X     X     X",
     "X  X  XXXXXXX  XXXXXXX  X",
     "X  X     XT         EX  X",
     "X  XXXX  XXXXXXXXXXXXX  X",
-    "X       E             X  X",
+    "X       E             X X",
     "XXXXXXX  X  XXXXXXX  X  X",
     "X        X     X  XE   TX",
     "X  XXXXXXXXXX  X  XXXXXXX",
@@ -259,28 +281,23 @@ level_2 = [
 levels.append(level_1)
 levels.append(level_2)
 
-setup_maze(levels[1])
-
-wn.onkey(player.move_down, "Down")
-wn.onkey(player.move_up, "Up")
-wn.onkey(player.move_left, "Left")
-wn.onkey(player.move_right, "Right")
-wn.listen()
-
-for enemy in enemies:
-    turtle.ontimer(enemy.move_enemy, t=120)
+setup_level(1)
 
 while True:
 
     if player.is_collision(exit):
-        exit.playerExit()
+        exit.isLevelDone()
+        setup_level(2)
 
     for reward in treasure:
 
         if player.is_collision(reward):
             reward.shape(OpenTreasure_Pic)
             player.points += reward.points
-            livesBox.showLives()
+            # if reward.points == 100:
+                # turtle.write('Gold Acquired!', False, align='center', font=('Times New Roman', 60, 'bold'))
+            pointsBox.clear()
+            pointsBox.showPoints()
             print("Player Points: {}".format(player.points))
             treasure.remove(reward)
 
@@ -296,7 +313,7 @@ while True:
             if player.lives == 0:
                 print("Player Dead")
                 wn.clearscreen()
-                # wn.bgpic(GameOver)
+                wn.bgpic(GameOver)
                 turtle.hideturtle()
                 turtle.write('Game Over', False, align='center', font=('Times New Roman', 50, 'bold'))
 
